@@ -28,6 +28,20 @@ Status CreateList(linklist *L)
          
     return OK;
 }
+
+Status display(linklist *L)
+{
+   linklist *p;
+   p=L->next;
+    while(p)
+      {
+          printf("%d ",p->data);
+          p=p->next;
+        }
+     printf("\n");
+  return OK;
+}
+
 Status reverse(linklist *L)
 { 
    //单链表逆置
@@ -36,10 +50,10 @@ Status reverse(linklist *L)
      L->next=NULL;
       while(p)
         {
-             q=p;
-              p=p->next;
-             q->next=L->next;
-             L->next=q;
+            q=p;
+            p=p->next;
+            q->next=L->next;
+            L->next=q;
            }
    return OK;
 }
