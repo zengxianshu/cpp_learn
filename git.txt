@@ -1,0 +1,135 @@
+ 
+
+———创建于提交
+
+初始化一个Git仓库，使用git init命令。
+
+添加文件到Git仓库，分两步：
+
+第一步，使用命令git add <file>，注意，可反复多次使用，添加多个文件；
+
+第二步，使用命令git commit -m “本次提交的说明”
+
+
+——查看变更
+
+要随时掌握工作区的状态，使用git status命令。
+
+如果git status告诉你有文件被修改过，用git diff可以查看修改内容。
+
+
+——查看提交记录
+
+git log命令显示从最近到最远的提交日志
+
+如果嫌输出信息太多，看得眼花缭乱的，可以用 git log --pretty=oneline
+
+
+———版本回退
+
+Git允许我们在版本的历史之间穿梭，使用命令git reset --hard commit_id。
+
+用HEAD表示当前版本，上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100
+
+穿梭前，用git log可以查看提交历史，以便确定要回退到哪个版本。
+
+要重返未来，用git reflog查看命令历史，以便确定要回到未来的哪个版本。
+
+
+eg: git reset --hard b1f3b45297c9d13868e14ec28a2a3aeb72c349ed
+    
+git push --force （将本次变更强行推送至服务器。这样在服务器上的最后一次错误提交也彻底消失了）
+值得注意的是，这类操作比较比较危险，例如：在你的commit 3之后别人又提交了新的commit 4，那在你强制推送之后，那位仁兄的commit 4也跟着一起消失了。
+
+——撤销修改
+
+场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout -- file。
+
+场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令git reset HEAD file，就回到了场景1，第二步按场景1操作。
+
+git checkout其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原” 
+git checkout .
+
+命令git rm用于删除一个文件。
+
+commit 错误
+git status 先看一下add 中的文件 
+git reset HEAD 如果后面什么都不跟的话 就是上一次add 里面的全部撤销了 
+git reset HEAD XXX/XXX/XXX.Java 就是对某个文件进行撤销了
+
+git log 查看节点 
+commit xxxxxxxxxxxxxxxxxxxxxxxxxx 
+Merge: 
+Author: 
+Date:
+
+然后 
+git reset commit_id
+
+over
+
+PS：还没有 push 也就是 repo upload 的时候
+
+git reset commit_id （回退到上一个 提交的节点 代码还是原来你修改的） 
+git reset –hard commit_id （回退到上一个commit节点， 代码也发生了改变，变成上一次的）
+
+如果要是 提交了以后，可以使用 git revert
+
+还原已经提交的修改 
+此次操作之前和之后的commit和history都会保留，并且把这次撤销作为一次最新的提交 
+git revert HEAD 撤销前一次 commit 
+git revert HEAD^ 撤销前前一次 commit 
+git revert commit-id (撤销指定的版本，撤销也会作为一次提交进行保存） 
+git revert是提交一个新的版本，将需要revert的版本的内容再反向修改回去，版本会递增，不影响之前提交的内容。
+
+
+———Git鼓励大量使用分支：
+
+查看分支：git branch
+
+创建分支：git branch <name>
+
+切换分支：git checkout <name>
+
+创建+切换分支：git checkout -b <name>
+
+合并某分支到当前分支：git merge <name>
+
+删除分支：git branch -d <name>
+
+git log --graph命令可以看到分支合并图。
+
+
+
+
+二、Commit message 的格式
+
+每次提交，Commit message 都包括三个部分：Header，Body 和 Footer。
+
+<type>(<scope>): <subject>// 空一行<body>// 空一行<footer>
+其中，Header 是必需的，Body 和 Footer 可以省略。
+
+不管是哪一个部分，任何一行都不得超过72个字符（或100个字符）。这是为了避免自动换行影响美观。
+
+2.1 Header
+
+Header部分只有一行，包括三个字段：type（必需）、scope（可选）和subject（必需）。
+
+（1）type
+
+type用于说明 commit 的类别，只允许使用下面7个标识。
+
+feat：新功能（feature）
+
+fix：修补bug
+
+docs：文档（documentation）
+
+style： 格式（不影响代码运行的变动）
+
+refactor：重构（即不是新增功能，也不是修改bug的代码变动）
+
+test：增加测试
+
+chore：构建过程或辅助工具的变动
+
